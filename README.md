@@ -36,7 +36,7 @@ This project uses Asymmetric cryptography.
 - To create the private/public keys I had to:
 `keytool -genkeypair -alias melardev -keyalg RSA -keysize 2048 -keystore private.jks -validity 3650`
 - export public key from jks
-`keytool -list -rfc --keystore private.jks | openssl x509 -inform pem -pubkey -noout -keyout public.pem`
+`keytool -list -rfc --keystore private.jks | openssl x509 -inform pem -pubkey -noout -out public.pem`
 
 
 # What you will learn:

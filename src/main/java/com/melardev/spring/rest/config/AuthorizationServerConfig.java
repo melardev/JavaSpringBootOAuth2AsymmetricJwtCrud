@@ -1,6 +1,6 @@
 package com.melardev.spring.rest.config;
 
-import com.melardev.spring.rest.config.security.ClaimsTokenEnhancer;
+import com.melardev.spring.rest.security.ClaimsTokenEnhancer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,7 +44,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private ClaimsTokenEnhancer authTokenEnhancer;
 
-
     @Autowired
     private DataSource dataSource;
 
@@ -53,6 +53,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Value("${app.security.key_file_path}")
     String keyClasspathFilePath;
+
+    @Value("${app.security.key_file_path_as_resource}")
+    Resource keyFileAsResource;
 
     @Value("${app.security.key_file_password}")
     private String keyFilePassword;
@@ -209,6 +212,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public JwtAccessTokenConverter accessTokenConverter() {
         if (accessTokenConverter == null) {
             accessTokenConverter = new JwtAccessTokenConverter();
+
+            // new KeyStoreKeyFactory(keyFileAsResource, keyFilePassword.toCharArray());
+
             KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource(keyClasspathFilePath),
                     keyFilePassword.toCharArray());
             // If you use the same password for keystore and key inside the keystore then it is safe to use the below
